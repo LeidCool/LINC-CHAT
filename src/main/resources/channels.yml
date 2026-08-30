@@ -1,0 +1,85 @@
+# LINC-Chat channel definitions.
+# Any channel can be fully disabled (enabled: false) without affecting the others.
+# Add extra blocks under `channels:` for custom channels (e.g. staff, rp, event) -- they
+# automatically become type CUSTOM and support the same options as the built-in ones.
+#
+# `format` placeholders available: <tag> <badge> <prefix_color> <prefix> <name_color> <player>
+# <message_color> <message>. <badge> is an optional extra label rendered before the rank
+# prefix (like a clan/guild tag or a donor "badge" you see on some networks) -- it comes
+# from the LuckPerms meta key `unichat-badge` (set per-user or per-group, e.g.
+# `/lp user Steve meta set unichat-badge "<gold>[VIP]</gold>"`) and is empty by default.
+
+channels:
+  global:
+    enabled: true
+    display-name: "Глобальный"
+    tag: "<dark_gray>[<green>G</green>]</dark_gray>"
+    format: "<tag> <badge><prefix_color><prefix></prefix_color> <name_color><player></name_color> <gray><bold>➤</bold></gray> <message_color><message></message_color>"
+    default: false
+    range: 0                # 0 = no distance limit
+    cooldown-seconds: 1
+    shortcut: "!"            # keep quoted; unquoted ! is YAML syntax. "!hello" → global
+    item-link: true
+    permission:
+      speak: null            # null = everyone
+      see: null
+
+  local:
+    enabled: true
+    display-name: "Локальный"
+    tag: "<dark_gray>[<yellow>L</yellow>]</dark_gray>"
+    format: "<tag> <badge><prefix_color><prefix></prefix_color> <name_color><player></name_color> <gray><bold>➤</bold></gray> <message_color><message></message_color>"
+    # Local is the default channel: a message with no recognised shortcut prefix
+    # (e.g. "как дела?") always goes here.
+    default: true
+    range: 200               # default local chat radius, in blocks
+    vertical-check: true     # true = 3D distance, false = horizontal-only (2D)
+    cooldown-seconds: 1
+    shortcut: "l:"
+    item-link: true
+    # If true, and nobody else is within `range` blocks (or nobody who would actually
+    # receive the message -- see "channel-empty-radius" in messages_*.yml), the sender
+    # gets a private notice that no one will hear them. Only applies to channels with
+    # `range` > 0.
+    notify-if-empty: true
+    permission:
+      speak: null
+      see: null
+
+  trade:
+    enabled: true
+    display-name: "Торговый"
+    tag: "<dark_gray>[<gold>$</gold>]</dark_gray>"
+    format: "<tag> <badge><prefix_color><prefix></prefix_color> <name_color><player></name_color> <gray><bold>➤</bold></gray> <message_color><message></message_color>"
+    default: false
+    range: 0
+    cooldown-seconds: 5
+    shortcut: "$"            # "$sell diamond" sends to trade from any channel
+    item-link: true
+    price-highlight-color: "<green>"
+    message-cost: 0           # Vault withdrawal per message, 0 = disabled
+    permission:
+      speak: null
+      see: null
+
+  admin:
+    enabled: true
+    display-name: "Админский"
+    tag: "<dark_gray>[<red>A</red>]</dark_gray>"
+    format: "<tag> <badge><prefix_color><prefix></prefix_color> <name_color><player></name_color> <gray><bold>➤</bold></gray> <message_color><message></message_color>"
+    default: false
+    range: 0
+    cooldown-seconds: 0
+    shortcut: "#"            # keep quoted; unquoted # starts a YAML comment. "#hello" → admin
+    item-link: true
+    permission:
+      speak: unichat.channel.admin.speak
+      see: unichat.channel.admin.see
+
+  private:
+    enabled: true
+    display-name: "Личные сообщения"
+    tag: "<dark_gray>[<light_purple>ЛС</light_purple>]</dark_gray>"
+    tag-outgoing: "<dark_gray>[<light_purple>ЛС →</light_purple>]</dark_gray>"
+    tag-incoming: "<dark_gray>[<light_purple>ЛС ←</light_purple>]</dark_gray>"
+    item-link: false

@@ -1,0 +1,17 @@
+.gradle/
+build/
+out/
+.idea/
+*.iml
+.vscode/
+.gradle-bootstrap/
+scratch/
+cp.txt
+
+# Local test server (if run via Paper run task)
+run/
+server/
+
+# Built plugin jars accidentally copied into the tree
+*.jar
+!gradle/wrapper/gradle-wrapper.jar

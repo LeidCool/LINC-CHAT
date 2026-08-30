@@ -1,0 +1,89 @@
+# LINC-Chat main configuration.
+# Colour values use MiniMessage tags (<green>, <#55ff55>, <gradient:...>, ...).
+# Legacy '&' colour codes typed by players are auto-converted where noted.
+
+# Server-wide default locale. See messages_<locale>.yml for translations.
+locale: ru
+
+storage:
+  # yaml  -- default, one file per player under plugins/LINC-Chat/playerdata/
+  # sqlite / mysql -- NOT implemented yet in this build (Phase 4). Selecting either of these
+  #                   logs a warning on startup and the plugin falls back to yaml.
+  type: yaml
+
+integrations:
+  # auto = use the integration if the plugin is detected, true/false force it on/off.
+  luckperms: auto
+  vault: auto
+  placeholderapi: auto
+  worldguard: auto   # reserved for Phase 4 (region-based channel restrictions), currently unused
+
+# What to do with third-party PlaceholderAPI placeholders left inside a channel `format`
+# template when PlaceholderAPI is not installed: strip = remove them, keep = leave as-is.
+placeholder-fallback: strip
+
+colors:
+  default-prefix-color: "<gray>"
+  default-name-color: "<white>"
+  default-message-color: "<white>"
+  # Allow players to type legacy '&' codes (e.g. &a) into /chatcolor; they are converted
+  # to MiniMessage tags before validation.
+  allow-legacy-color-codes-input: true
+  # Allow players to colour their own chat messages directly (not just via /chatcolor),
+  # using either legacy '&' codes or MiniMessage tags (<green>, <#ff0055>, <gradient:...>,
+  # <rainbow>). What a player can actually use is graded by their permission tier, same as
+  # /chatcolor: unichat.color.basic -> 16 standard colours + bold/italic/etc, unichat.color.hex
+  # -> + arbitrary HEX, unichat.color.gradient -> + gradients/rainbow. A player with none of
+  # these permissions always sees their message as plain, unstyled text.
+  allow-color-codes-in-messages: true
+
+mentions:
+  enabled: true
+  sound: "entity.experience_orb.pickup"
+  sound-volume: 1.0
+  sound-pitch: 1.0
+  color: "<yellow>"
+
+item-link:
+  enabled: true
+  keyword: "item"          # token *item1 .. *item9 -> hotbar slots 1-9
+  max-per-message: 5
+  no-permission-behavior: keep-text   # keep-text | strip | block-message
+  empty-slot-text: "<gray><пусто></gray>"
+  block-if-empty: false
+  display-color: inherit   # auto = vanilla-style rarity colouring | inherit = matches whatever
+                            # colour/gradient/hex is in effect around it in the message | or set
+                            # any MiniMessage colour tag here (e.g. "<gold>") to force one always
+
+moderation:
+  anti-caps:
+    enabled: true
+    threshold-percent: 70
+    min-length: 6
+  anti-spam:
+    similarity-threshold-percent: 85
+  swear-filter:
+    enabled: false
+    action: replace   # replace | block | warn
+    words: []
+  advertising-filter:
+    enabled: false
+    action: warn      # block | replace | warn
+    whitelist-domains: []
+  chat-log:
+    enabled: false
+    retention-days: 30
+
+ignore:
+  # If true, /ignore also hides messages from that player in public channels (Global/Local/Trade),
+  # not just private messages.
+  apply-to-public-channels: false
+
+commands:
+  # Individually enable/disable these command names. All of them send a private message
+  # (/<cmd> <player> <message>), except `r` which replies to the last PM (in either
+  # direction) without needing a player name. All default to true.
+  me: true
+  m: true
+  msg: true
+  r: true

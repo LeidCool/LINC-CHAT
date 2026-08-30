@@ -1,0 +1,123 @@
+name: LINC-Chat
+main: com.leidcool.lincchat.LincChatPlugin
+version: '${version}'
+api-version: '1.21'
+author: leidcool
+description: >-
+  Multifunctional chat plugin for Paper: Global/Local/Trade/Admin/PM channels,
+  LuckPerms & Vault integration, per-layer chat colors, moderation and
+  anti-spam, item-link tokens and more.
+website: https://github.com/leidcool/LINC-CHAT
+folia-supported: false
+softdepend: [LuckPerms, Vault, PlaceholderAPI]
+loadbefore: [hChatGame, EZColors, EmotesChat, EssentialsChat]
+
+permissions:
+  unichat.*:
+    description: Grants access to every LINC-Chat feature.
+    default: op
+    children:
+      unichat.channel.use: true
+      unichat.channel.toggle: true
+      unichat.channel.admin: true
+      unichat.pm.send: true
+      unichat.ignore: true
+      unichat.socialspy: true
+      unichat.color.self: true
+      unichat.color.basic: true
+      unichat.color.hex: true
+      unichat.color.gradient: true
+      unichat.mute: true
+      unichat.clear: true
+      unichat.pause: true
+      unichat.me: true
+      unichat.item.share: true
+      unichat.bypass.itemlinklimit: true
+      unichat.bypass.cooldown: true
+      unichat.bypass.filter: true
+      unichat.bypass.caps: true
+      unichat.bypass.mute: true
+      unichat.admin.reload: true
+      unichat.admin.debug: true
+      unichat.mentions.toggle: true
+
+  unichat.channel.use:
+    description: Allows using /ch to switch the active channel.
+    default: true
+  unichat.channel.toggle:
+    description: Allows toggling per-channel listening on/off.
+    default: true
+  unichat.channel.admin:
+    description: Allows using admin chat (#).
+    default: op
+    children:
+      unichat.channel.admin.speak: true
+      unichat.channel.admin.see: true
+  unichat.channel.admin.speak:
+    description: Allows sending messages to admin chat with #.
+    default: op
+  unichat.channel.admin.see:
+    description: Allows seeing admin chat messages.
+    default: op
+  unichat.pm.send:
+    description: Allows sending private messages (/msg, /m, /me, /tell, /w, /r).
+    default: true
+  unichat.ignore:
+    description: Allows /ignore and /unignore.
+    default: true
+  unichat.socialspy:
+    description: Allows watching all private messages on the server.
+    default: op
+  unichat.color.self:
+    description: Allows setting your own chat colors via /chatcolor.
+    default: true
+  unichat.color.basic:
+    description: Allows the 16 standard Minecraft colors (+ bold/italic/etc.) in /chatcolor and directly inside chat messages.
+    default: true
+  unichat.color.hex:
+    description: Allows arbitrary HEX colors in /chatcolor and directly inside chat messages.
+    default: false
+  unichat.color.gradient:
+    description: Allows MiniMessage gradients/rainbow in /chatcolor and directly inside chat messages.
+    default: false
+  unichat.mute:
+    description: Allows /mute and /unmute.
+    default: op
+  unichat.clear:
+    description: Allows /chatclear.
+    default: op
+  unichat.pause:
+    description: Allows /chatpause and /slowmode.
+    default: op
+  unichat.me:
+    description: >-
+      Reserved for the original /me roleplay-action implementation (currently unused, since
+      /me now sends a private message under unichat.pm.send -- see MeCommand/CommandRegistrar).
+    default: true
+  unichat.item.share:
+    description: Allows using *item1..*item9 hotbar item-link tokens in chat.
+    default: true
+  unichat.bypass.itemlinklimit:
+    description: Removes the max-per-message limit on item-link tokens.
+    default: op
+  unichat.bypass.cooldown:
+    description: Bypasses per-channel chat cooldowns.
+    default: op
+  unichat.bypass.filter:
+    description: Bypasses the swear filter and advertising filter.
+    default: op
+  unichat.bypass.caps:
+    description: Bypasses the anti-caps filter.
+    default: op
+  unichat.bypass.mute:
+    description: Allows speaking while muted.
+    default: op
+  unichat.admin.reload:
+    description: Allows /unichat reload.
+    default: op
+  unichat.admin.debug:
+    description: Allows /unichat debug.
+    default: op
+  unichat.mentions.toggle:
+    description: Allows toggling personal mention notifications.
+    default: true
