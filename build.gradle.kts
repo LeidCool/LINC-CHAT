@@ -5,7 +5,7 @@ plugins {
 
 group = "com.leidcool"
 version = "0.1.0-SNAPSHOT"
-description = "LINC-Chat -- multifunctional chat plugin for Paper"
+description = "LINC-Chat for Paper 1.20.1"
 
 java {
     toolchain {
@@ -21,11 +21,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("me.clip:placeholderapi:2.12.3")
-
     implementation("org.spongepowered:configurate-yaml:4.2.0")
 }
 
@@ -33,7 +32,7 @@ val relocateBase = "com.leidcool.lincchat.libs"
 
 tasks.shadowJar {
     archiveClassifier.set("")
-    archiveBaseName.set("LINC-Chat")
+    archiveBaseName.set("LINC-Chat-1.20.1")
 
     relocate("org.spongepowered.configurate", "$relocateBase.configurate")
     relocate("io.leangen.geantyref", "$relocateBase.geantyref")
@@ -57,9 +56,5 @@ tasks.processResources {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.release.set(21)
-}
-
-tasks.test {
-    useJUnitPlatform()
+    options.release.set(17)
 }

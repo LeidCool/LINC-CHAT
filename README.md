@@ -1,5 +1,7 @@
 # LINC-Chat
 
+Ветка **`1.20.1`** — подписанная сборка под Paper **1.20.1**. Ядро под Paper **1.21+** живёт в ветке [`core`](https://github.com/leidcool/LINC-CHAT/tree/core).
+
 Многофункциональный чат-плагин для Paper (с прицелом на порт на Spigot/Bukkit/Folia): каналы Global/Local/Trade/PM, интеграция с LuckPerms и Vault, настраиваемые цвета префикса/ника/сообщения, метки каналов, модерация, антиспам, JSON hover/click, item-link токены `*item1`–`*item9` и публичный API для сторонних плагинов.
 
 Полное техническое задание — [`docs/TOR.md`](docs/TOR.md). Ниже — фактический статус реализации относительно этого ТЗ.
@@ -16,7 +18,7 @@
 | Абстракции интеграций (Permissions/Economy/Placeholder/Scheduler) | ✅ | `integration/` — задел под Folia и Spigot-порт |
 | Конфиги (`config.yml`, `channels.yml`, `messages_ru.yml`, `messages_en.yml`) | ✅ | Configurate 4.x YAML, сохранение комментариев, автослияние новых ключей |
 | Хранилище данных игрока | ✅ (YAML) | `playerdata/<uuid>.yml`; `SqlPlayerDataStore` — заглушка на Phase 4 |
-| Каналы Global / Local / Trade / PM | ✅ | Индивидуальное вкл/выкл, шорткаты, права speak/see |
+| Каналы Global / Local / Trade / Admin / PM | ✅ | Индивидуальное вкл/выкл, шорткаты, права speak/see |
 | Локальный чат: радиус, 2D/3D, per-world | ✅ | Дефолт 200 блоков, override через LuckPerms-мету/permission-ноды |
 | Цвета: приоритет игрок → LuckPerms-мета → дефолт конфига | ✅ | `/chatcolor`, права `unichat.color.basic/hex/gradient` |
 | LuckPerms / Vault / PlaceholderAPI интеграции | ✅ | Прямой LuckPerms API, live-обновление через `UserDataRecalculateEvent` |
@@ -26,7 +28,7 @@
 | Item-link токены `*item1`–`*item9` + hover тултип предмета | ✅ | Раздел 12.6 ТЗ |
 | Mentions (`@nick`) + звук + JSON hover/click по нику | ✅ | |
 | `/me` | ✅ | |
-| Команды | ✅ | Paper 1.21: Brigadier `LifecycleEvents.COMMANDS`. Paper 1.20.1: Bukkit `plugin.yml` + `CommandExecutor` |
+| Команды | ✅ | Paper 1.20.1: Bukkit `plugin.yml` + `CommandExecutor` |
 | Публичный API (`UniChatAPI`, кастомные события) | ✅ | `api/` — для сторонних плагинов |
 | DiscordSRV-мост, WorldGuard-ограничения, chat bubbles, GUI-палитра, offline-почта, `/mutehistory`, `/chatlog` (книга), спойлер-теги, SQL-бэкенд | ⏭️ Phase 4 | Точки расширения заложены (`ChatBridge`, `ChannelAccessGuard`, `SqlPlayerDataStore`) |
 
@@ -44,7 +46,7 @@
 - [x] Плагин собирается (`./gradlew build` зелёный).
 - [ ] Проверено на чистом Paper 1.20.4+/1.21+ без LuckPerms/Vault/PAPI — ожидается работа через no-op провайдеры, но живой тест на сервере ещё не проводился.
 - [ ] Проверено с LuckPerms + Vault на живом сервере (live-обновление меты без релога).
-- [x] Все 4 канала (Global/Local/Trade/PM) реализованы, независимо включаются/выключаются в `channels.yml`.
+- [x] Каналы Global/Local/Trade/Admin/PM реализованы, независимо включаются/выключаются в `channels.yml`.
 - [x] Радиус локального чата настраивается в конфиге и применяется через `/unichat reload` без перезапуска.
 - [x] Метки `[G]`/`[L]`/`[$]`/`[ЛС]` настраиваются в `channels.yml` (текст + цвет через MiniMessage-теги).
 - [x] `/chatcolor` сохраняет цвет между заходами (YAML playerdata).
@@ -57,32 +59,23 @@
 
 ## Сборка
 
-Требования: JDK 21. Сборка 1.20.1 компилируется с `--release 17` (байткод Java 17), сборка 1.21 — Java 21.
+Требования: JDK 21 (байткод Java 17, `--release 17`). Эта ветка собирает плагин для Paper **1.20.1**.
 
 ```powershell
-# Windows PowerShell, из корня проекта — обе сборки
 .\gradlew.bat build
 ```
 
 ```bash
-# Linux/macOS
 ./gradlew build
 ```
 
-Готовые shadow-джары (Configurate/SnakeYAML уже внутри):
+Готовый shadow-jar: `build/libs/LINC-Chat-1.20.1-0.1.0-SNAPSHOT.jar` (Configurate/SnakeYAML уже внутри). Загружайте файл как есть, без распаковки.
 
-| Сервер | Артефакт |
-|---|---|
-| Paper **1.21+** (Java 21) | `build/libs/linc-chat-<version>.jar` |
-| Paper **1.20.1** (Java 17+) | `paper-1.20.1/build/libs/LINC-Chat-1.20.1-<version>.jar` |
-
-Только 1.20.1: `.\gradlew.bat :paper-1.20.1:build`
-
-Не ставьте оба jar на один сервер — это один и тот же плагин `LINC-Chat`.
+Не ставьте этот jar вместе с сборкой из ветки `core` — это один и тот же плагин `LINC-Chat`.
 
 ## Установка
 
-1. Скопируйте нужный jar в папку `plugins/` Paper-сервера (**1.21+** или **1.20.1** — см. таблицу выше).
+1. Скопируйте jar в папку `plugins/` Paper-сервера **1.20.1**.
 2. (Опционально, но рекомендуется) поставьте LuckPerms и Vault для полноценных цветов/префиксов и экономики Trade-канала; PlaceholderAPI — для `%unichat_*%` и сторонних плейсхолдеров в форматах каналов.
 3. Запустите сервер. При первом старте создадутся `plugins/LINC-Chat/config.yml`, `channels.yml`, `messages_ru.yml`, `messages_en.yml`.
 4. Настройте `channels.yml`/`config.yml` по вкусу, затем `/unichat reload` (право `unichat.admin.reload`) — без перезапуска сервера.
@@ -95,7 +88,7 @@
 | `/ch <channel>`, `/ch toggle <channel>` | Переключить активный канал / вкл-выкл прослушивание |
 | `/msg`, `/tell`, `/w`, `/r` | Приватные сообщения и ответ на последнее |
 | `/ignore`, `/unignore` | Игнор-лист |
-| `/socialspy` | Просмотр чужих ЛС (для персонала) |
+| `/socialspy`, `/spy` | Просмотр чужих ЛС (для персонала) |
 | `/chatcolor` | Личные цвета префикса/ника/сообщения |
 | `/mute`, `/unmute` | Мут (глобальный или по каналу, с TTL) |
 | `/chatclear` | Очистка чата |
@@ -109,11 +102,11 @@
 
 ```
 src/main/java/com/leidcool/lincchat/
-├── LincChatPlugin.java     — bootstrap: DI всех сервисов, onEnable/onDisable
+├── paper1201/LincChatPlugin.java — bootstrap для Paper 1.20.1 (Bukkit-команды)
 ├── api/                    — публичный API + кастомные события для сторонних плагинов
-├── channel/                — модель каналов (Global/Local/Trade/PM/Custom)
+├── channel/                — модель каналов (Global/Local/Trade/Admin/PM/Custom)
 ├── color/                  — резолвер цветов и permission-политика
-├── commands/               — команды (Paper Brigadier)
+├── commands/               — команды (Bukkit CommandExecutor)
 ├── config/                 — Configurate-обёртки над config.yml/channels.yml/messages
 ├── core/                   — реализация публичного API
 ├── format/                 — FormatEngine, item-link/mention парсеры
