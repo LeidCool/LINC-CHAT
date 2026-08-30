@@ -1,6 +1,6 @@
 # LINC-Chat
 
-Ветка **`core`** — ядро под Paper **1.21+**. Исходники Paper **1.20.1** живут в ветке [`1.20.1`](https://github.com/leidcool/LINC-CHAT/tree/1.20.1).
+Ветка **`1.21.1`** — ядро под Paper **1.21+**. Исходники Paper **1.20.1** живут в ветке [`1.20.1`](https://github.com/leidcool/LINC-CHAT/tree/1.20.1).
 
 Многофункциональный чат-плагин для Paper (с прицелом на порт на Spigot/Bukkit/Folia): каналы Global/Local/Trade/PM, интеграция с LuckPerms и Vault, настраиваемые цвета префикса/ника/сообщения, метки каналов, модерация, антиспам, JSON hover/click, item-link токены `*item1`–`*item9` и публичный API для сторонних плагинов.
 
